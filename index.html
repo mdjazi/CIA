@@ -262,7 +262,7 @@
         }
         .btn-back:hover { border-color: var(--gold-color); color: var(--gold-color); }
         
-        /* التشفير */
+        /* أدوات التشفير المصممة بشكل أنيق */
         .crypto-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -273,8 +273,36 @@
         .crypto-box {
             background: #04060a;
             border: 1px solid var(--border-color);
+            padding: 18px;
+            border-radius: 8px;
+        }
+
+        /* مستطيل النتيجة الأنيق للتشفير */
+        .crypto-result-box {
+            background: linear-gradient(135deg, #09121d 0%, #04060a 100%);
+            border: 1px solid var(--gold-color);
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(197, 160, 89, 0.15);
+            text-align: center;
+        }
+        .crypto-result-title {
+            font-size: 11px;
+            color: var(--gold-color);
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .crypto-result-value {
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--success-color);
+            word-break: break-all;
+            background: rgba(16, 185, 129, 0.05);
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px dashed rgba(16, 185, 129, 0.3);
         }
 
         /* الملاحظات وسجل الميدان */
@@ -293,7 +321,6 @@
         }
         .log-title { color: var(--accent-color); font-weight: bold; margin-bottom: 8px; }
 
-        /* البطاقات العامة والمطلوبين */
         .data-card {
             border: 1px solid var(--border-color);
             background: #04060a;
@@ -308,7 +335,7 @@
         .btn-del-item { background: var(--danger-color); color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; }
         .btn-edit-item { background: var(--gold-color); color: #000; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; }
 
-        /* تصميم التقارير الاستخباراتية الواقعي */
+        /* تصميم التقارير الاستخباراتية */
         .report-memo-card {
             background: #090e15;
             border: 1px solid #1e2d42;
@@ -437,7 +464,7 @@
                 </div>
                 <div class="folder-card" onclick="openSection('recordsSection')">
                     <b>RECORDS 📁</b>
-                    <small>السجلات الجنائية والتشفير</small>
+                    <small>السجلات الجنائية</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('intelligenceSection')">
@@ -446,8 +473,8 @@
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('casesSection')">
-                    <b>CASES 📁</b>
-                    <small>القضايا والعقوبات</small>
+                    <b> Decryption 📁 </b>
+                    <small>🔓 تشفير وفك التشفير 🔒</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('usersSection')">
@@ -461,22 +488,30 @@
             </div>
         </div>
 
-        <!-- قسم مركز الإدارة كواجهة منفصلة بطلب المستخدم -->
+        <!-- مركز الإدارة بالتحديد التلقائي للرتبة -->
         <div class="workspace-panel leader-panel" id="leaderSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص والسرية</h3>
             <p style="font-size:12px; color:#94a3b8; margin-bottom: 15px;">إنشاء وتحديث الحسابات بالسحابة أونلاين:</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px;">
                 <div class="input-group"><label>اسم الوكيل</label><input type="text" id="new-username" placeholder="Username"></div>
                 <div class="input-group"><label>المعرف (Badge ID)</label><input type="text" id="new-id" placeholder="CIA-709"></div>
                 <div class="input-group"><label>كلمة المرور</label><input type="text" id="new-password" placeholder="Passcode"></div>
                 <div class="input-group"><label>رمز PIN</label><input type="text" id="new-pin" placeholder="PIN"></div>
+                <div class="input-group">
+                    <label>الرتبة التشغيلية</label>
+                    <select id="new-role">
+                        <option value="SPECIAL AGENT">SPECIAL AGENT</option>
+                        <option value="CID Member">CID Member</option>
+                        <option value="FIELD AGENT">FIELD AGENT</option>
+                        <option value="DIRECTOR">DIRECTOR</option>
+                    </select>
+                </div>
             </div>
             <button class="btn-login" style="background:var(--success-color); font-size: 13px;" onclick="createAccount()">➕ إضافة الحساب أونلاين</button>
             <div id="users-container" style="margin-top:15px;"></div>
         </div>
 
-        <!-- قسم التقارير بتصميم رسمي واقعي -->
         <div class="workspace-panel" id="reportsSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">📝 قسم التقارير والمذكرات الاستخباراتية</h3>
@@ -491,13 +526,12 @@
                 <div class="input-group"><label>رابط فيديو كدليل (اختياري)</label><input type="text" id="reportVideo" placeholder="https://example.com/video.mp4"></div>
                 <button class="btn-login" style="background:var(--accent-color); font-weight:bold;" onclick="addReport()">إرسال وحفظ التقرير أونلاين</button>
             </div>
-            
             <h4 style="color:var(--gold-color); margin-bottom:15px;">📑 التقارير والمذكرات الرسمية المحفوظة:</h4>
             <div id="reports-list"></div>
             <div class="log-box" id="reports-log"></div>
         </div>
 
-        <!-- قسم المطلوبين (تم نقل التشفير منه) -->
+        <!-- قائمة المطلوبين مع 3 خيارات لمستوى الخطورة -->
         <div class="workspace-panel" id="wantedSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">📜 قائمة المطلوبين للعدالة (WANTED LIST)</h3>
@@ -506,34 +540,22 @@
             </div>
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم المطلوب</label><input type="text" id="wantedName" placeholder="Name"></div>
-                <div class="input-group"><label>مستوى الخطورة</label><input type="text" id="wantedRisk" placeholder="مثال: خطر جداً"></div>
+                <div class="input-group">
+                    <label>مستوى الخطورة</label>
+                    <select id="wantedRisk">
+                        <option value="🟡 منخفض الخطورة">🟡 منخفض الخطورة</option>
+                        <option value="🟠 متوسط الخطورة">🟠 متوسط الخطورة</option>
+                        <option value="🔴 خطر جداً">🔴 خطر جداً</option>
+                    </select>
+                </div>
                 <div class="input-group"><label>التهم التفصيلية</label><textarea id="wantedCrime" rows="2" placeholder="التهمة"></textarea></div>
                 <button class="btn-login" style="background:var(--danger-color);" onclick="addWanted()">+ إضافة مطلوب إلى القائمة</button>
             </div>
             <div id="wanted-list" style="display:flex; gap:15px; flex-wrap:wrap;"></div>
         </div>
 
-        <!-- قسم السجلات (تم نقل أدوات التشفير إليه) -->
         <div class="workspace-panel" id="recordsSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            
-            <!-- أدوات التشفير وفك التشفير المنقولة -->
-            <div class="crypto-grid">
-                <div class="crypto-box">
-                    <label style="color:var(--accent-color); font-weight:bold; font-size:12px;">🔒 تشفير رسالة</label>
-                    <input type="text" id="plainText" placeholder="أدخل النص للتشفير..." style="margin-top:5px;">
-                    <button class="btn-login" style="margin-top:8px; background:var(--accent-color);" onclick="encryptMsg()">تشفير</button>
-                </div>
-                <div class="crypto-box">
-                    <label style="color:var(--gold-color); font-weight:bold; font-size:12px;">🔓 فك التشفير</label>
-                    <input type="text" id="cipherText" placeholder="أدخل الكود لفك التشفير..." style="margin-top:5px;">
-                    <button class="btn-login" style="margin-top:8px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك التشفير</button>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px; font-size:12px; background:#04060a; padding:10px; border-radius:5px; border:1px solid var(--border-color);">
-                النتيجة: <b id="cryptoResult" style="color:var(--success-color);">-</b>
-            </div>
-
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">📂 السجل الجنائي للمواطنين</h3>
             <div class="input-group">
                 <input type="text" id="recordsSearch" class="search-box" placeholder="🔍 بحث في السجل الجنائي للأشخاص" oninput="renderRecords()">
@@ -561,10 +583,29 @@
             <div id="gangs-list"></div>
         </div>
 
+        <!-- ملف القضايا والعقوبات الذي يحتوي الآن على أدوات التشفير فقط مستطيل أنيق -->
         <div class="workspace-panel" id="casesSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-color);">⚖️ القضايا والعقوبات</h3>
-            <p style="font-size:12px; color:#94a3b8; margin-top:10px;">جميع بيانات القضايا يتم إدارتها وتحديثها عبر التقارير والسجل الجنائي التفاعلي.</p>
+            <h3 style="color:var(--gold-color); margin-bottom: 20px;">🔓 قسم التشفير وفك التشفير 🔒</h3>
+            
+            <div class="crypto-grid">
+                <div class="crypto-box">
+                    <label style="color:var(--accent-color); font-weight:bold; font-size:12px;">🔒 تشفير رسالة</label>
+                    <input type="text" id="plainText" placeholder="أدخل النص للتشفير..." style="margin-top:8px;">
+                    <button class="btn-login" style="margin-top:12px; background:var(--accent-color);" onclick="encryptMsg()">تشفير البيانات</button>
+                </div>
+                <div class="crypto-box">
+                    <label style="color:var(--gold-color); font-weight:bold; font-size:12px;">🔓 فك التشفير</label>
+                    <input type="text" id="cipherText" placeholder="أدخل الكود لفك التشفير..." style="margin-top:8px;">
+                    <button class="btn-login" style="margin-top:12px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك تشفير الكود</button>
+                </div>
+            </div>
+
+            <!-- مستطيل النتيجة الأنيق -->
+            <div class="crypto-result-box">
+                <div class="crypto-result-title">📋 النتيجة التشفيرية المخرجة</div>
+                <div class="crypto-result-value" id="cryptoResult">- في انتظار الإدخال -</div>
+            </div>
         </div>
 
         <div class="workspace-panel" id="usersSection">
@@ -737,7 +778,6 @@
             }
         }
 
-        /* عرض التقارير بشكل واقعي */
         function renderReports() {
             const list = document.getElementById("reports-list");
             if (!list) return;
@@ -782,14 +822,13 @@
 
         async function addWanted() {
             const name = document.getElementById("wantedName").value.trim();
-            const risk = document.getElementById("wantedRisk").value.trim();
+            const risk = document.getElementById("wantedRisk").value;
             const crime = document.getElementById("wantedCrime").value.trim();
             if (!name || !crime) return alert("يرجى تعبئة بيانات المطلوب!");
-            globalDatabase.wanted.push({ id: Date.now(), name, risk: risk || "مطلوب", crime });
+            globalDatabase.wanted.push({ id: Date.now(), name, risk: risk, crime });
             addLog(`قام [${currentUser}] بإضافة مطلوب جديد: ${name}`);
             
             document.getElementById("wantedName").value = "";
-            document.getElementById("wantedRisk").value = "";
             document.getElementById("wantedCrime").value = "";
             await saveCloudData();
         }
@@ -799,12 +838,9 @@
             if (!item) return;
             const newName = prompt("تعديل اسم المطلوب:", item.name);
             if (newName === null) return;
-            const newRisk = prompt("تعديل مستوى الخطورة:", item.risk);
-            if (newRisk === null) return;
             const newCrime = prompt("تعديل التهم:", item.crime);
             if (newCrime === null) return;
             item.name = newName;
-            item.risk = newRisk;
             item.crime = newCrime;
             addLog(`قام [${currentUser}] بتعديل بيانات المطلوب: ${item.name}`);
             await saveCloudData();
@@ -964,11 +1000,12 @@
             const id = document.getElementById("new-id").value.trim();
             const pass = document.getElementById("new-password").value.trim();
             const pin = document.getElementById("new-pin").value.trim();
+            const role = document.getElementById("new-role").value;
             if (!user || !id || !pass || !pin) return alert("يرجى تعبئة جميع الحقول!");
-            globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: "SPECIAL AGENT" };
-            addLog(`تم إنشاء حساب جديد لـ: ${user}`);
+            globalDatabase.users[user] = { password: pass, pin: pin, id: id, role: role };
+            addLog(`تم إنشاء حساب جديد لـ: ${user} برتبة: [${role}]`);
             await saveCloudData();
-            alert(`تم إضافة الحساب (${user}) أونلاين!`);
+            alert(`تم إضافة الحساب (${user}) أونلاين بنجاح!`);
         }
 
         async function deleteAccount(username) {
@@ -1048,7 +1085,7 @@
             if (!val) return;
             try {
                 document.getElementById("cryptoResult").innerText = decodeURIComponent(escape(atob(val)));
-            } catch (e) { document.getElementById("cryptoResult").innerText = "كود خاطئ!"; }
+            } catch (e) { document.getElementById("cryptoResult").innerText = "⚠️ كود خاطئ أو غير صالح!"; }
         }
 
         function logout() {
