@@ -1,0 +1,17 @@
+Create a static single-page web app with Arabic (RTL) interface for a CIA Federal Data Terminal login system.
+
+Requirements:
+1. Outer Login Screen (Public):
+   - Dark theme styling matching CIA terminal aesthetics.
+   - Logo placeholder/image and official agency titles ("CIA FEDERAL MDT", "CENTRAL INTELLIGENCE AGENCY").
+   - Inputs for Username, Passcode, and 4-digit PIN Code.
+   - Access validation: Users cannot enter the inner portal unless they input valid credentials.
+
+2. Inner System (Protected):
+   - Hidden until successful login.
+   - Top Header showing logged-in user name/ID and role badge.
+   - Director/Leader Panel: Only visible for DIRECTOR role (e.g., username "Karlos", passcode "admin", PIN "0000"). Allows adding new users with Username, Badge ID, Password, and PIN, and viewing the list of authorized users.
+   - General archives/reports area for standard agents (e.g., username "Agent_Smith", passcode "123", PIN "8899").
+   - Logout button that returns to the login screen and resets inputs.
+
+All logic should run client-side in index.html.
