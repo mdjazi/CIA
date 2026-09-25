@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CIA SYSTEM v7.0 | نظام التحكم والاستخبارات</title>
+    <title>CIA SYSTEM | نظام التحكم والاستخبارات</title>
     <style>
         :root {
             --bg-color: #05080c;
@@ -151,6 +151,27 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn-leader-nav {
+            background: #171004;
+            color: var(--gold-color);
+            border: 1px solid var(--gold-color);
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            display: none;
+            transition: 0.2s;
+        }
+        .btn-leader-nav:hover {
+            background: var(--gold-color);
+            color: #000;
+        }
         .btn-logout {
             background: var(--danger-color);
             color: #fff;
@@ -240,6 +261,8 @@
             font-size: 12px;
         }
         .btn-back:hover { border-color: var(--gold-color); color: var(--gold-color); }
+        
+        /* التشفير */
         .crypto-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -253,6 +276,8 @@
             padding: 15px;
             border-radius: 6px;
         }
+
+        /* الملاحظات وسجل الميدان */
         .log-box {
             background: #000;
             border: 1px solid var(--border-color);
@@ -267,6 +292,8 @@
             overflow-y: auto;
         }
         .log-title { color: var(--accent-color); font-weight: bold; margin-bottom: 8px; }
+
+        /* البطاقات العامة والمطلوبين */
         .data-card {
             border: 1px solid var(--border-color);
             background: #04060a;
@@ -280,12 +307,78 @@
         .action-btns { position: absolute; top: 10px; left: 10px; display: flex; gap: 5px; }
         .btn-del-item { background: var(--danger-color); color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; }
         .btn-edit-item { background: var(--gold-color); color: #000; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 10px; font-weight: bold; }
+
+        /* تصميم التقارير الاستخباراتية الواقعي */
+        .report-memo-card {
+            background: #090e15;
+            border: 1px solid #1e2d42;
+            border-left: 4px solid var(--gold-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 18px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+        .report-memo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+        .report-classification {
+            background: rgba(220, 38, 38, 0.15);
+            color: #f87171;
+            border: 1px solid #ef4444;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .report-memo-title {
+            color: var(--gold-color);
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .report-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 8px;
+            background: #04060a;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            border: 1px dashed var(--border-color);
+        }
+        .report-meta-grid div b { color: var(--text-color); }
+        .report-body-text {
+            color: #e2e8f0;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            background: #060a10;
+            padding: 12px;
+            border-radius: 4px;
+            border-right: 3px solid var(--accent-color);
+        }
+        .report-media-container {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         th, td { padding: 10px; border: 1px solid var(--border-color); text-align: right; }
         th { background: #04060a; color: var(--gold-color); }
         .leader-panel { border: 1px solid var(--gold-color); background: #090e15; padding: 25px; border-radius: 8px; margin-bottom: 20px; }
         .user-list-item { display: flex; justify-content: space-between; align-items: center; background: #04060a; padding: 12px 15px; margin-top: 10px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 13px; }
-        .img-preview { max-width: 100%; max-height: 200px; border-radius: 5px; margin-top: 10px; border: 1px solid var(--border-color); }
+        .img-preview { max-width: 100%; max-height: 250px; border-radius: 5px; margin-top: 8px; border: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
@@ -302,27 +395,30 @@
         </div>
         <div class="input-group">
             <label>كلمة المرور التشفيرية (Passcode)</label>
-            <input type="password" id="login-password" placeholder="••••••••" autocomplete="new-password">
+            <input type="password" id="login-password" placeholder="•••••" autocomplete="new-password">
         </div>
         <div class="input-group">
             <label>رمز الأمان التشغيلي (PIN Code)</label>
             <input type="password" id="login-pin" placeholder="••••" autocomplete="off">
         </div>
         <button class="btn-login" onclick="login()">تسجيل الدخول للمنظومة الفدرالية</button>
-        <div class="sync-status" id="loading-status">   تم الاتصال بالسحابة</div>
+        <div class="sync-status" id="loading-status">🔄 جاري الاتصال بالسحابة...</div>
         <div class="error-msg" id="error-msg">⚠️ خطأ: اسم المستخدم، كلمة السر، أو الرمز غير صحيح!</div>
     </div>
 
     <div id="main-system">
         <div class="header-system">
             <div>
-                <h3 style="margin:0; color:var(--gold-color); font-size:18px;">🛡️ CIA SYSTEM  | نظام التحكم والاستخبارات</h3>
+                <h3 style="margin:0; color:var(--gold-color); font-size:18px;">🛡️ CIA SYSTEM | نظام التحكم والاستخبارات</h3>
                 <small style="color:#94a3b8;">
                     العضو: <span id="current-user-display" style="color:var(--accent-color); font-weight:bold;">Mutleq</span> 
                     | الرتبة: <span id="current-role-display" class="badge">CID Member</span>
                 </small>
             </div>
-            <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+            <div class="header-actions">
+                <button class="btn-leader-nav" id="btn-leader-toggle" onclick="openSection('leaderSection')">👑 مركز الإدارة والتراخيص</button>
+                <button class="btn-logout" onclick="logout()">تسجيل الخروج</button>
+            </div>
         </div>
 
         <div class="folder-grid-panel" id="folderHome">
@@ -331,17 +427,17 @@
             <div class="folder-grid">
                 <div class="folder-card" onclick="openSection('reportsSection')">
                     <b>REPORTS 📁</b>
-                    <small>التقارير والمذكرات</small>
+                    <small>التقارير والمذكرات الرسمية</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('wantedSection')">
                     <b>WANTED 📁</b>
-                    <small>المطلوبون</small>
+                    <small>المطلوبون للعدالة</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('recordsSection')">
                     <b>RECORDS 📁</b>
-                    <small>السجلات الجنائية</small>
+                    <small>السجلات الجنائية والتشفير</small>
                     <span class="open-lbl">OPEN FOLDER →</span>
                 </div>
                 <div class="folder-card" onclick="openSection('intelligenceSection')">
@@ -365,74 +461,87 @@
             </div>
         </div>
 
-        <div id="leader-section" class="leader-panel" style="display: none;">
+        <!-- قسم مركز الإدارة كواجهة منفصلة بطلب المستخدم -->
+        <div class="workspace-panel leader-panel" id="leaderSection">
+            <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color); margin-top:0;">👑 مركز إدارة التراخيص والسرية</h3>
             <p style="font-size:12px; color:#94a3b8; margin-bottom: 15px;">إنشاء وتحديث الحسابات بالسحابة أونلاين:</p>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-                <div class="input-group"><label>اسم الوكيل</label><input type="text" id="new-username" placeholder="Username..."></div>
+                <div class="input-group"><label>اسم الوكيل</label><input type="text" id="new-username" placeholder="Username"></div>
                 <div class="input-group"><label>المعرف (Badge ID)</label><input type="text" id="new-id" placeholder="CIA-709"></div>
-                <div class="input-group"><label>كلمة المرور</label><input type="text" id="new-password" placeholder="Passcode..."></div>
-                <div class="input-group"><label>رمز PIN</label><input type="text" id="new-pin" placeholder="PIN..."></div>
+                <div class="input-group"><label>كلمة المرور</label><input type="text" id="new-password" placeholder="Passcode"></div>
+                <div class="input-group"><label>رمز PIN</label><input type="text" id="new-pin" placeholder="PIN"></div>
             </div>
             <button class="btn-login" style="background:var(--success-color); font-size: 13px;" onclick="createAccount()">➕ إضافة الحساب أونلاين</button>
             <div id="users-container" style="margin-top:15px;"></div>
         </div>
 
+        <!-- قسم التقارير بتصميم رسمي واقعي -->
         <div class="workspace-panel" id="reportsSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <h3 style="color:var(--gold-color); margin-bottom: 15px;">📝 قسم التقارير والمذكرات</h3>
+            <h3 style="color:var(--gold-color); margin-bottom: 15px;">📝 قسم التقارير والمذكرات الاستخباراتية</h3>
             <div class="input-group">
-                <input type="text" id="reportSearch" class="search-box" placeholder="🔍 بحث في قاعدة بيانات التقارير" oninput="renderReports()">
+                <input type="text" id="reportSearch" class="search-box" placeholder="🔍 بحث في قاعدة بيانات التقارير..." oninput="renderReports()">
             </div>
-            <div class="input-group"><label>عنوان التقرير</label><input type="text" id="reportTitle" placeholder="عنوان التقرير..."></div>
-            <div class="input-group"><label>تفاصيل التقرير</label><textarea id="reportDetails" rows="3" placeholder="تفاصيل التقرير..."></textarea></div>
-            <div class="input-group"><label>Citizen ID المرتبط بالتقرير</label><input type="text" id="reportCitizen" placeholder="مثال: CIA-102"></div>
-            <div class="input-group"><label>رابط صورة كدليل (اختياري)</label><input type="text" id="reportImage" placeholder="https://example.com/image.jpg"></div>
-            <div class="input-group"><label>رابط فيديو كدليل (اختياري)</label><input type="text" id="reportVideo" placeholder="https://example.com/video.mp4"></div>
-            <button class="btn-login" style="background:var(--accent-color); font-weight:bold; margin-bottom:20px;" onclick="addReport()">إرسال وحفظ التقرير أونلاين</button>
-            <h4 style="color:var(--gold-color); margin-bottom:10px;">📑 التقارير المحفوظة بالنظام:</h4>
+            <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:20px; border:1px solid var(--border-color);">
+                <div class="input-group"><label>عنوان التقرير / المذكرة</label><input type="text" id="reportTitle" placeholder="مثال: تقرير مراقبة تحركات مشبوهة"></div>
+                <div class="input-group"><label>تفاصيل التقرير الاستخباراتي</label><textarea id="reportDetails" rows="4" placeholder="اكتب تفاصيل التقرير بشكل مفصل..."></textarea></div>
+                <div class="input-group"><label>Citizen ID المرتبط بالتقرير</label><input type="text" id="reportCitizen" placeholder="مثال: CIA-102"></div>
+                <div class="input-group"><label>رابط صورة كدليل (اختياري)</label><input type="text" id="reportImage" placeholder="https://example.com/image.jpg"></div>
+                <div class="input-group"><label>رابط فيديو كدليل (اختياري)</label><input type="text" id="reportVideo" placeholder="https://example.com/video.mp4"></div>
+                <button class="btn-login" style="background:var(--accent-color); font-weight:bold;" onclick="addReport()">إرسال وحفظ التقرير أونلاين</button>
+            </div>
+            
+            <h4 style="color:var(--gold-color); margin-bottom:15px;">📑 التقارير والمذكرات الرسمية المحفوظة:</h4>
             <div id="reports-list"></div>
             <div class="log-box" id="reports-log"></div>
         </div>
 
+        <!-- قسم المطلوبين (تم نقل التشفير منه) -->
         <div class="workspace-panel" id="wantedSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
-            <div class="crypto-grid">
-                <div class="crypto-box">
-                    <label style="color:var(--accent-color); font-weight:bold; font-size:12px;">🔒 تشفير رسالة</label>
-                    <input type="text" id="plainText" placeholder="أدخل النص..." style="margin-top:5px;">
-                    <button class="btn-login" style="margin-top:8px; background:var(--accent-color);" onclick="encryptMsg()">تشفير</button>
-                </div>
-                <div class="crypto-box">
-                    <label style="color:var(--gold-color); font-weight:bold; font-size:12px;">🔓 فك التشفير</label>
-                    <input type="text" id="cipherText" placeholder="أدخل الكود..." style="margin-top:5px;">
-                    <button class="btn-login" style="margin-top:8px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك التشفير</button>
-                </div>
-            </div>
-            <div style="margin-bottom: 20px; font-size:12px;">النتيجة الحالية: <b id="cryptoResult" style="color:var(--success-color);">-</b></div>
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">📜 قائمة المطلوبين للعدالة (WANTED LIST)</h3>
             <div class="input-group">
-                <input type="text" id="wantedSearch" class="search-box" placeholder="🔍 بحث في داتابيس المطلوبين..." oninput="renderWanted()">
+                <input type="text" id="wantedSearch" class="search-box" placeholder="🔍 بحث في داتابيس المطلوبين" oninput="renderWanted()">
             </div>
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
-                <div class="input-group"><label>اسم المطلوب</label><input type="text" id="wantedName" placeholder="Name..."></div>
+                <div class="input-group"><label>اسم المطلوب</label><input type="text" id="wantedName" placeholder="Name"></div>
                 <div class="input-group"><label>مستوى الخطورة</label><input type="text" id="wantedRisk" placeholder="مثال: خطر جداً"></div>
-                <div class="input-group"><label>التهم التفصيلية</label><textarea id="wantedCrime" rows="2" placeholder="التهمة..."></textarea></div>
+                <div class="input-group"><label>التهم التفصيلية</label><textarea id="wantedCrime" rows="2" placeholder="التهمة"></textarea></div>
                 <button class="btn-login" style="background:var(--danger-color);" onclick="addWanted()">+ إضافة مطلوب إلى القائمة</button>
             </div>
             <div id="wanted-list" style="display:flex; gap:15px; flex-wrap:wrap;"></div>
         </div>
 
+        <!-- قسم السجلات (تم نقل أدوات التشفير إليه) -->
         <div class="workspace-panel" id="recordsSection">
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
+            
+            <!-- أدوات التشفير وفك التشفير المنقولة -->
+            <div class="crypto-grid">
+                <div class="crypto-box">
+                    <label style="color:var(--accent-color); font-weight:bold; font-size:12px;">🔒 تشفير رسالة</label>
+                    <input type="text" id="plainText" placeholder="أدخل النص للتشفير..." style="margin-top:5px;">
+                    <button class="btn-login" style="margin-top:8px; background:var(--accent-color);" onclick="encryptMsg()">تشفير</button>
+                </div>
+                <div class="crypto-box">
+                    <label style="color:var(--gold-color); font-weight:bold; font-size:12px;">🔓 فك التشفير</label>
+                    <input type="text" id="cipherText" placeholder="أدخل الكود لفك التشفير..." style="margin-top:5px;">
+                    <button class="btn-login" style="margin-top:8px; background:var(--gold-color); color:#000;" onclick="decryptMsg()">فك التشفير</button>
+                </div>
+            </div>
+            <div style="margin-bottom: 20px; font-size:12px; background:#04060a; padding:10px; border-radius:5px; border:1px solid var(--border-color);">
+                النتيجة: <b id="cryptoResult" style="color:var(--success-color);">-</b>
+            </div>
+
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">📂 السجل الجنائي للمواطنين</h3>
             <div class="input-group">
-                <input type="text" id="recordsSearch" class="search-box" placeholder="🔍 بحث في السجل الجنائي للأشخاص..." oninput="renderRecords()">
+                <input type="text" id="recordsSearch" class="search-box" placeholder="🔍 بحث في السجل الجنائي للأشخاص" oninput="renderRecords()">
             </div>
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
                 <div class="input-group"><label>اسم المواطن</label><input type="text" id="recName" placeholder="John Doe"></div>
                 <div class="input-group"><label>Citizen ID</label><input type="text" id="recId" placeholder="CIA-102"></div>
-                <div class="input-group"><label>سجل الملاحظات والقضايا</label><textarea id="recNotes" rows="2" placeholder="الملاحظات..."></textarea></div>
+                <div class="input-group"><label>سجل الملاحظات والقضايا</label><textarea id="recNotes" rows="2" placeholder="الملاحظات"></textarea></div>
                 <button class="btn-login" style="background:var(--gold-color); color:#000;" onclick="addRecord()">+ إضافة ملف جديد للسجل</button>
             </div>
             <div id="records-list"></div>
@@ -442,11 +551,11 @@
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color); margin-bottom: 15px;">GANG INTELLIGENCE 🕵️‍♂️</h3>
             <div class="input-group">
-                <input type="text" id="gangsSearch" class="search-box" placeholder="🔍 بحث في مخططات الاستخبارات والعصابات..." oninput="renderGangs()">
+                <input type="text" id="gangsSearch" class="search-box" placeholder="🔍 بحث في مخططات الاستخبارات والعصابات" oninput="renderGangs()">
             </div>
             <div style="background:#04060a; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid var(--border-color);">
-                <div class="input-group"><label>اسم العصابة / التنظيم</label><input type="text" id="gangName" placeholder="Gang Name..."></div>
-                <div class="input-group"><label>تفاصيل المخطط والارتباطات</label><textarea id="gangDetails" rows="2" placeholder="التفاصيل..."></textarea></div>
+                <div class="input-group"><label>اسم العصابة / التنظيم</label><input type="text" id="gangName" placeholder="Gang Name"></div>
+                <div class="input-group"><label>تفاصيل المخطط والارتباطات</label><textarea id="gangDetails" rows="2" placeholder="التفاصيل"></textarea></div>
                 <button class="btn-login" style="background:var(--gold-color); color:#000;" onclick="addGang()">+ إنشاء مخطط عصابة جديد</button>
             </div>
             <div id="gangs-list"></div>
@@ -462,7 +571,7 @@
             <button class="btn-back" onclick="showHome()">← العودة للرئيسية</button>
             <h3 style="color:var(--gold-color);">👥 قائمة الأعضاء المسجلين بالمنظومة</h3>
             <div class="input-group">
-                <input type="text" id="usersSearch" class="search-box" placeholder="🔍 بحث في قائمة الأعضاء..." oninput="renderUsers()">
+                <input type="text" id="usersSearch" class="search-box" placeholder="🔍 بحث في قائمة الأعضاء" oninput="renderUsers()">
             </div>
             <table>
                 <thead>
@@ -478,10 +587,8 @@
     </div>
 
     <script>
-        // غيّر المفاتيح هنا للمفاتيح الخاصة بك
-        const BIN_ID = "6ab6e56fffd5d160532f4935"; 
-        const API_KEY = "$2a$10$ZXzhSLL8D1YNW9Zmr.juXOkVKuOJZxW98yPqylLL22uJZ1Z8Aayj6"; 
-
+        const BIN_ID = "ضع_هنا_BIN_ID_الخاص_بك"; 
+        const API_KEY = "ضع_هنا_API_KEY_بدون_نقطة_في_النهاية"; 
         let defaultDatabase = {
             users: {
                 "Majed": { password: "1967", pin: "0000", id: "CIA-001", role: "DIRECTOR" },
@@ -493,11 +600,9 @@
             gangs: [],
             logs: ["[SYSTEM READY]: تم الاتصال بالسحابة الفدرالية."]
         };
-
         let globalDatabase = defaultDatabase;
         let currentUser = "";
 
-        // جلب البيانات من السحابة اونلاين
         async function fetchCloudData() {
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest?nocache=${Date.now()}`, {
@@ -511,15 +616,10 @@
                         const statusElem = document.getElementById("loading-status");
                         if(statusElem) statusElem.innerText = "✅ متصل بالمنظومة الفدرالية ومُزامن بنجاح";
                     }
-                } else {
-                    console.error("فشل في جلب البيانات من السحابة:", res.status);
                 }
-            } catch (e) {
-                console.error("خطأ شبكة أثناء المزامنة:", e);
-            }
+            } catch (e) { console.error(e); }
         }
 
-        // حفظ كل شيء للسحابة أونلاين
         async function saveCloudData() {
             try {
                 const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
@@ -535,9 +635,7 @@
                 } else {
                     alert("⚠️ فشل الحفظ في السحابة! تحقق من API_KEY أو BIN_ID");
                 }
-            } catch (e) { 
-                alert("⚠️ خطأ في الاتصال أثناء حفظ البيانات!"); 
-            }
+            } catch (e) { alert("⚠️ خطأ في الاتصال أثناء حفظ البيانات!"); }
         }
 
         function checkAutoLogin() {
@@ -568,13 +666,15 @@
             
             document.getElementById("current-user-display").innerText = `${user}`;
             const roleDisplay = document.getElementById("current-role-display");
+            const leaderBtn = document.getElementById("btn-leader-toggle");
+            
             roleDisplay.innerText = globalDatabase.users[user].role;
             if (globalDatabase.users[user].role === "DIRECTOR") {
                 roleDisplay.className = "badge badge-leader";
-                document.getElementById("leader-section").style.display = "block";
+                leaderBtn.style.display = "inline-block";
             } else {
                 roleDisplay.className = "badge";
-                document.getElementById("leader-section").style.display = "none";
+                leaderBtn.style.display = "none";
             }
             renderAllData();
             showHome();
@@ -637,6 +737,7 @@
             }
         }
 
+        /* عرض التقارير بشكل واقعي */
         function renderReports() {
             const list = document.getElementById("reports-list");
             if (!list) return;
@@ -648,17 +749,32 @@
                 (r.citizen && r.citizen.toLowerCase().includes(q))
             ).forEach(r => {
                 const div = document.createElement("div");
-                div.className = "data-card";
+                div.className = "report-memo-card";
                 div.innerHTML = `
                     <div class="action-btns">
                         <button class="btn-edit-item" onclick="editReport(${r.id})">تعديل</button>
                         <button class="btn-del-item" onclick="deleteReport(${r.id})">حذف</button>
                     </div>
-                    <h4 style="color:var(--gold-color);">${r.title}</h4>
-                    <p style="font-size:12px; margin:8px 0; color:#d1d9e6;">${r.details}</p>
-                    ${r.image ? `<img src="${r.image}" class="img-preview" alt="دليل صور"><br>` : ''}
-                    <small style="color:var(--text-muted);">بواسطة: ${r.author} | ID: ${r.citizen || 'غير محدد'} | الوقت: ${r.date}</small>
-                    ${r.video ? `<br><a href="${r.video}" target="_blank" style="color:var(--accent-color); font-size:11px;">🎥 مشاهدة الفيديو المرفق</a>` : ''}
+                    <div class="report-memo-header">
+                        <div>
+                            <span class="report-classification">TOP SECRET // CLASSIFIED</span>
+                            <div class="report-memo-title">📄 ${r.title}</div>
+                        </div>
+                    </div>
+                    <div class="report-meta-grid">
+                        <div>الكاتب: <b>${r.author}</b></div>
+                        <div>الـ ID المرتبط: <b>${r.citizen || 'غير محدد'}</b></div>
+                        <div>تاريخ الصدور: <b>${r.date}</b></div>
+                        <div>رقم التقرير: <b>#REF-${r.id.toString().slice(-5)}</b></div>
+                    </div>
+                    <div class="report-body-text">${r.details}</div>
+                    ${(r.image || r.video) ? `
+                        <div class="report-media-container">
+                            <small style="color:var(--gold-color); font-weight:bold;">📷 الأدلة والبراهين المرفقة:</small><br>
+                            ${r.image ? `<img src="${r.image}" class="img-preview" alt="دليل صور"><br>` : ''}
+                            ${r.video ? `<a href="${r.video}" target="_blank" style="color:var(--accent-color); font-size:12px; display:inline-block; margin-top:5px;">🎥 مشاهدة التسجيل المرفق</a>` : ''}
+                        </div>
+                    ` : ''}
                 `;
                 list.appendChild(div);
             });
@@ -856,7 +972,7 @@
         }
 
         async function deleteAccount(username) {
-            if (username === "Karlos") return alert("لا يمكنك حذف المدير!");
+            if (username === "Majed") return alert("لا يمكنك حذف المدير!");
             if (confirm(`حذف (${username})؟`)) {
                 delete globalDatabase.users[username];
                 await saveCloudData();
@@ -915,6 +1031,8 @@
 
         function openSection(sectionId) {
             document.getElementById("folderHome").style.display = "none";
+            const panels = document.querySelectorAll('.workspace-panel');
+            panels.forEach(p => p.style.display = 'none');
             const target = document.getElementById(sectionId);
             if (target) target.style.display = "block";
         }
@@ -939,12 +1057,10 @@
             document.getElementById("main-system").style.display = "none";
         }
 
-        // جلب البيانات فور تحميل الصفحة
         fetchCloudData().then(() => {
             checkAutoLogin();
         });
 
-        // مزامنة تلقائية كل 5 ثوانٍ لجلب التقارير والتعديلات الجديدة من الأجهزة الأخرى
         setInterval(fetchCloudData, 5000);
     </script>
 </body>
